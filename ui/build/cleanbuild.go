@@ -166,3 +166,27 @@ func installCleanIfNecessary(ctx Context, config Config) {
 
 	writeConfig()
 }
+
+// Remove everything relevant for a clean ota package
+func deviceClean(ctx Context, config Config, what int) {
+
+	productOutPath := config.ProductOut()
+	productOut := func(path string) string {
+		return filepath.Join(productOutPath, path)
+	}
+
+	removeGlobs(ctx,
+		productOut("*.cpio"),
+		productOut("*.img"),
+		productOut("*.zip"),
+		productOut("*.zip.md5sum"),
+		productOut("android-info.txt"),
+		productOut("kernel"),
+		productOut("recovery"),
+		productOut("root"),
+		productOut("system"),
+		productOut("system_other"),
+		productOut("vendor"))
+
+	ctx.Println("Device specific stuff removed.")
+}
